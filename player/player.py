@@ -1,4 +1,6 @@
 import json
+import logging
+import random
 
 
 class Player:
@@ -8,11 +10,33 @@ class Player:
 
     def __init__(self):
         self.name = "Random_Bot"
+        self.players_type = {}  # {ws1: Row, ws2: Column}
 
-    def make_room(self, ws):
+    def add_ws(self, ws, player_type):
+        self.players_type[ws] = player_type
+
+    def send_make_room(self, ws):
+        player_type = 'Row'
         message = {'action': 'make-room',
-                   'player_type': 'Row',  # Row or Column
+                   'player_type': player_type,  # Row or Column
                    'handicap': '-3',
                    'name': self.name}
-        print(f'send: {message}')
+        logging.info(f'send: {message}')
         ws.send(json.dumps(message))
+        self.add_ws(ws, player_type)
+
+    def send_action(self, ws, receive_message):
+        player_type = self.players_type[ws]
+        room_id = receive_message["room_id"]
+        action = self.__action_type(player_type) + str(random.choice(["1", "2", "3"]))
+        message = {'action': 'play-action',
+                   'room_id': room_id,
+                   'play_action': action}
+        logging.info(f'send: {message}')
+        ws.send(json.dumps(message))
+
+    @staticmethod
+    def __action_type(player_type):
+        if player_type == "Row":
+            return 'r'
+        return 'c'
