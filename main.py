@@ -1,5 +1,7 @@
 import websocket
 import json
+from config import URI
+# You can choose a player
 from player.player import Player
 
 PLAYER = Player()
@@ -28,8 +30,7 @@ def on_close(ws):
 
 
 if __name__ == '__main__':
-    socket = "ws://localhost:8080/ws-novem"
-    ws = websocket.WebSocketApp(socket,
+    ws = websocket.WebSocketApp(URI,
                                 on_open=on_open,
                                 on_message=on_message,
                                 on_close=on_close)
