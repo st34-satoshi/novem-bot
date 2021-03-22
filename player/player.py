@@ -10,6 +10,7 @@ class Player:
 
     def __init__(self):
         self.name = "Random_Bot"
+        # This bot can play in some rooms at the same time
         self.players_type = {}  # {ws1: Row, ws2: Column}
 
     def add_ws(self, ws, player_type):
