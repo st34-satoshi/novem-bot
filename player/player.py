@@ -16,6 +16,10 @@ class Player:
     def add_ws(self, ws, player_type):
         self.players_type[ws] = player_type
 
+    def remove_ws(self, ws):
+        logging.info(f"len ws = {len(self.players_type)}")
+        logging.info(f"remove ws: {self.players_type.pop(ws)}")
+
     def send_make_room(self, ws):
         player_type = 'Row'
         message = {'action': 'make-room',

@@ -28,6 +28,7 @@ def on_message(ws, message):
         if message['is_terminal']:
             # The game is end. Close the connection and start a new connection
             logging.info("The game is end.")
+            PLAYER.remove_ws(ws)
             ws.close()
             logging.info("Start a new connection")
             start_connection()
