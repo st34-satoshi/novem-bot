@@ -10,7 +10,7 @@ PLAYER = Player()
 
 
 def on_open(ws):
-    print("opened")
+    logging.debug("opened")
 
 
 def on_message(ws, message):
@@ -25,17 +25,28 @@ def on_message(ws, message):
         logging.info("make a room")
         PLAYER.send_make_room(ws)
     elif message['action'] == 'playing':
+        if message['is_terminal']:
+            # The game is end. Close the connection and start a new connection
+            logging.info("The game is end.")
+            ws.close()
+            logging.info("Start a new connection")
+            start_connection()
+            return
         # return an action
         PLAYER.send_action(ws, message)
 
 
 def on_close(ws):
-    print("closed connection")
+    logging.debug("closed connection")
 
 
-if __name__ == '__main__':
+def start_connection():
     webs = websocket.WebSocketApp(URI,
                                   on_open=on_open,
                                   on_message=on_message,
                                   on_close=on_close)
     webs.run_forever()
+
+
+if __name__ == '__main__':
+    start_connection()
