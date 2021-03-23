@@ -35,6 +35,14 @@ def on_message(ws, message):
             return
         # return an action
         PLAYER.send_action(ws, message)
+    elif message['action'] == 'test_alive':
+        # This message is sent not to make this bot sleep.
+        message = {'action': 'test',
+                   'message': "I am alive"}
+        logging.info(f'send: {message}')
+        ws.send(json.dumps(message))
+    else:
+        logging.warning(f"I received an unexpected message. {message}")
 
 
 def on_close(ws):
