@@ -2,10 +2,10 @@ import websocket
 import json
 import logging
 from config import URI
-# You can choose a player
-from player.player import Player
+from players.player import Player
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 PLAYER = Player()
 
 
