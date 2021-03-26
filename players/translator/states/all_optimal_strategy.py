@@ -1,4 +1,4 @@
-from players.states.all_state_value import AllStateValue
+from players.translator.states.all_state_value import AllStateValue
 import logging
 
 
