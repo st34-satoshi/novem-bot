@@ -1,1 +1,1 @@
-SOLVING_RESULT = 'players/translator/states/2layer-second-game-A.pickle'
+SOLVING_RESULT = 'players/perfect_player/translator/states/1layer-second-game-A.pickle'

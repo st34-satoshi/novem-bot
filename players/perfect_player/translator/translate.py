@@ -3,11 +3,11 @@ import logging
 import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../../'))
 
-from players.translator.states import all_optimal_strategy
-from players.translator.states import slack
-from players.translator.t_config import SOLVING_RESULT
+from players.perfect_player.translator.states import all_optimal_strategy
+from players.perfect_player.translator.states import slack
+from players.perfect_player.translator.t_config import SOLVING_RESULT
 from config import PERFECT_FILE
 from players.perfect_player.perfect_info import PerfectInfo, Strategy
 sys.modules['states.all_optimal_strategy'] = all_optimal_strategy
