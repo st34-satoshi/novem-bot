@@ -9,5 +9,6 @@ Novem bot for playing
 ### Select Perfect bot
 Default bot is random bot. You can select random bot.
 
-1. download random bot file from google drive: `wget https://drive.google.com/file/d/1eTExCV_iAie3XnIN7op_97kWtgOZFUgb/view?usp=sharing -O players/perfect_player/2layer-second-game-A.pickle`
+1. download random bot file from google drive:  
+`wget https://drive.google.com/file/d/1eTExCV_iAie3XnIN7op_97kWtgOZFUgb/view?usp=sharing -O players/perfect_player/2layer-second-game-A.pickle`
 2. `python main.py --bot perfect`
