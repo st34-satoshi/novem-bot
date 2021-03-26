@@ -2,4 +2,4 @@
 # URI = "ws://localhost:8080/ws-novem"
 URI = "ws://153.126.167.150:443/ws-novem"
 
-PERFECT_FILE = 'players/states/2layer-second-game-A.pickle'
+PERFECT_FILE = 'players/perfect_player/2layer-second-game-A.pickle'

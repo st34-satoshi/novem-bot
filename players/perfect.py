@@ -2,13 +2,9 @@ import pickle
 import logging
 import json
 from players.player import Player
-from players.states import all_optimal_strategy
-from players.states import slack
 from config import PERFECT_FILE
 import sys
 import os
-sys.modules['states.all_optimal_strategy'] = all_optimal_strategy
-sys.modules['slack'] = slack
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
 

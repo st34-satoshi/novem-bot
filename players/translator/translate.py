@@ -1,17 +1,18 @@
 import pickle
 import logging
-import json
 import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../'))
 
-from players.player import Player
 from players.translator.states import all_optimal_strategy
 from players.translator.states import slack
-from players.translator.config import SOLVING_RESULT
+from players.translator.t_config import SOLVING_RESULT
+from config import PERFECT_FILE
+from players.perfect_player.perfect_info import PerfectInfo, Strategy
 sys.modules['states.all_optimal_strategy'] = all_optimal_strategy
 sys.modules['slack'] = slack
+logging.basicConfig(level=logging.INFO)
 
 
 def load_perfect():
@@ -22,77 +23,31 @@ def load_perfect():
     return all_optimal
 
 
-class OptimalPlayer(Player):
+def translate(all_optimal):
+    """
+    Translate from the pickle result of solving Novem to PerfectInfo
+    :param all_optimal:
+    :return:
 
-    def __init__(self):
-        super().__init__()
-        self.name = "Perfect_Bot"
-        self.all_optimal_strategy = load_perfect()
+    state key = '012111210n1p3, the remaining tile number, n1/2: row/column is attacking, p = row - column point
+    """
+    logging.info("start translating")
+    perfect_info = PerfectInfo()
 
-    def send_action(self, ws, receive_message):
-        player_type = receive_message['type']  # Row or Column
-        room_id = receive_message["room_id"]
+    # translate
+    for key, perfect in all_optimal.optimal_strategies.items():
+        row_strategy = perfect.row_strategy
+        column_strategy = perfect.column_strategy
+        perfect_info.optimal_strategies[key] = Strategy(row_strategy, column_strategy)
 
-        # generate key for perfect
-        board = receive_message["board"]
-        rounds = receive_message["round"]
-        row_point = receive_message["row_point"]
-        column_point = receive_message["column_point"]
-        key = self.gen_key(board, int(rounds), int(row_point)-int(column_point))
-        logging.debug(f"state key = {key}")
+    logging.info("finish translating")
 
-        action = self.all_optimal_strategy.next_action(key, player_type)
-
-        if action is None:  # Error
-            logging.error(f"perfect player has no strategy. key = {key}")
-            return super().send_action(ws, receive_message)
-
-        action = super().action_type(player_type) + str(action)
-        message = {'action': 'play-action',
-                   'room_id': room_id,
-                   'play_action': action}
-        logging.info(f'send: {message}')
-        ws.send(json.dumps(message))
-
-    @staticmethod
-    def gen_board(str_board):
-        """
-        :param str_board: 159672834951438276
-        :return: bottom and top
-        """
-        bottom = [[0 for _ in range(3)] for _ in range(3)]
-        top = [[0 for _ in range(3)] for _ in range(3)]
-        for i, c in enumerate(str_board):
-            if i < 9:
-                bottom[i // 3][i % 3] = c
-            else:
-                top[(i-9) // 3][(i-9) % 3] = c
-        return bottom, top
-
-    def gen_key(self, board, rounds, point_diff):
-        # point_diff = row - column
-        key = ""
-        # board
-        bottom, top = self.gen_board(board)
-        for i in range(3):
-            for j in range(3):
-                if top[i][j] != '0':
-                    key += "2"
-                elif bottom != '0':
-                    key += "1"
-                else:
-                    key += "0"
-        logging.debug(f"gen key! {board, bottom, top, key}")
-        # turn
-        if rounds % 2 == 0:  # Row is attacking
-            key += "n1"
-        else:
-            key += "n2"
-        # point
-        key += "p" + str(point_diff)
-        return key
+    logging.info("start saving as pickle")
+    # save
+    with open(PERFECT_FILE, mode='wb') as f:
+        pickle.dump(perfect_info, f)
 
 
 if __name__ == '__main__':
-    print(sys.path)
-    load_perfect()
+    solving_result = load_perfect()
+    translate(solving_result)
