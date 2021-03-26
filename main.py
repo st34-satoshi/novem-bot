@@ -1,10 +1,18 @@
 import websocket
 import json
 import logging
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--bot', default='random')
+args = parser.parse_args()
+
 from config import URI
 # You can choose a player
-# from players.player import Player
-from players.perfect import OptimalPlayer as Player
+if args.bot == 'perfect':
+    from players.perfect import OptimalPlayer as Player
+else:
+    from players.player import Player
 
 # logging.basicConfig(level=logging.INFO)
 logging.basicConfig(level=logging.DEBUG)
