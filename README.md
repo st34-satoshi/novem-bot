@@ -1,5 +1,7 @@
 # Novem Bot
-Novem bot for playing
+Novem bot for playing.  
+You can play [here](http://153.126.167.150:443/play-novem).  
+The server repository is [here](https://github.com/st34-satoshi/novem-server).
 
 ## Run
 1. `pip install -r requirements.txt`
